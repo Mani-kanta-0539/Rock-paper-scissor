@@ -1,0 +1,241 @@
+:root{
+    --bg1:#071428;
+    --bg2:#06294a;
+    --accent1:#6ee7ff;
+    --accent2:#60a5fa;
+    --card-glass:rgba(255,255,255,0.04);
+    --text:#e6f7ff;
+}
+/* Clear box styles for player and computer */
+.p-box, .c-box {
+    background: var(--card-glass);
+    backdrop-filter: blur(8px);
+    border-radius: 16px;
+    padding: 1.2rem;
+    min-width: 140px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Background shimmer animation */
+.game {
+    position: relative;
+    overflow: hidden;
+}
+
+.game::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(
+        45deg,
+        transparent 45%,
+        rgba(255,255,255,0.1) 50%,
+        transparent 55%
+    );
+    animation: shimmer 4s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes shimmer {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+}
+/* Animated cool gradient background (overrides universal *) */
+html,body{
+    height:100%;
+    background: linear-gradient(120deg,var(--bg1),var(--bg2),#032a4a) !important;
+    background-size: 300% 300% !important;
+    animation: gradientShift 14s ease infinite !important;
+    color:var(--text);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* subtle moving highlight layer */
+.game::before{
+    content:"";
+    position:fixed;
+    inset:-30%;
+    background:
+        radial-gradient(600px 300px at 10% 10%, rgba(96,165,250,0.06), transparent 10%),
+        radial-gradient(700px 350px at 90% 90%, rgba(125,211,252,0.05), transparent 12%);
+    pointer-events:none;
+    z-index:0;
+    transform: translateZ(0);
+    animation: floatLayer 12s linear infinite;
+}
+
+/* nicer title */
+.title{
+    color:var(--text);
+    text-shadow: 0 8px 32px rgba(96,165,250,0.12);
+    letter-spacing:1px;
+}
+
+/* glassy score board */
+.score{
+    background: var(--card-glass);
+    backdrop-filter: blur(6px) saturate(120%);
+    border-radius:12px;
+    padding:0.6rem 1rem;
+    box-shadow: 0 10px 30px rgba(2,6,23,0.55);
+}
+
+/* move & result tweaks */
+.move{ letter-spacing:1px; text-transform:uppercase; }
+.result{ color: #dff6ff; }
+
+/* Cool button visuals & animations (use !important to override later rules) */
+.rock, .paper, .scissor{
+    background: linear-gradient(135deg,var(--accent1),var(--accent2)) !important;
+    color: #002235 !important;
+    font-weight: 700;
+    box-shadow: 0 10px 30px rgba(59,130,246,0.18), inset 0 -6px 24px rgba(255,255,255,0.04);
+    transition: transform .18s cubic-bezier(.2,.9,.3,1), box-shadow .18s ease, filter .18s ease;
+    border-radius:14px;
+    border:none !important;
+    outline:none !important;
+}
+
+/* hover/active micro-interactions */
+.rock:hover, .paper:hover, .scissor:hover{
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 18px 44px rgba(59,130,246,0.22);
+    filter:brightness(1.06);
+}
+.rock:active, .paper:active, .scissor:active{
+    transform: translateY(-2px) scale(.99);
+    box-shadow: 0 8px 20px rgba(59,130,246,0.12);
+}
+
+/* pulsing glow for selected state (if JS adds .selected) */
+.rock.selected, .paper.selected, .scissor.selected{
+    animation: pulse 1.6s infinite;
+    box-shadow: 0 22px 60px rgba(96,165,250,0.18), 0 0 32px rgba(125,211,252,0.06);
+}
+
+/* reload button style */
+.reload{
+    background: linear-gradient(90deg,#7dd3fc,#60a5fa) !important;
+    color:#002235 !important;
+    box-shadow: 0 12px 36px rgba(59,130,246,0.16);
+    transition: transform .16s ease, box-shadow .16s ease;
+    border-radius:12px;
+}
+
+/* small responsive tweaks keep existing breakpoints intact */
+@keyframes gradientShift{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes floatLayer{
+    0%{transform:translateY(-6%) rotate(0deg)}
+    50%{transform:translateY(6%) rotate(0.5deg)}
+    100%{transform:translateY(-6%) rotate(0deg)}
+}
+@keyframes pulse{
+    0%{transform:translateY(0) scale(1); box-shadow:0 18px 44px rgba(59,130,246,0.22)}
+    50%{transform:translateY(-4px) scale(1.02); box-shadow:0 28px 70px rgba(96,165,250,0.24)}
+    100%{transform:translateY(0) scale(1); box-shadow:0 18px 44px rgba(59,130,246,0.22)}
+}
+/* universal selector - Applies to whole document */
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    background: #082c6c;
+    color: #fff;
+}
+/* To center everything in game */
+.game{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Title of the game */
+.title{
+    position: absolute;
+    top: 0;
+    font-size: 4rem;
+    z-index: 2;
+}
+
+/* Score Board */
+.score{
+    display: flex;
+    width: 30vw;
+    justify-content: space-evenly;
+    position: absolute;
+    top: 70px;
+    z-index: 1;
+}
+
+/* Score  */
+.p-count,.c-count{
+    text-align: center;
+    font-size: 1.5rem;
+    margin-top: 1rem;
+}
+
+/* displaying three buttons in one line */
+.options{
+    display: flex;
+    width: 50vw;
+    justify-content: space-evenly;
+    margin-top: 2rem;
+}
+
+/* Styling on all three buttons */
+.rock, .paper, .scissor{
+    padding: 0.8rem;
+    width: 100px;
+    border-radius: 10px;
+    background: green;
+    outline: none;
+    border-color: green;
+    border: none;
+    cursor: pointer;
+}
+
+.move{
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* Reload button style */
+.reload {
+    display: none;
+    margin-top: 2rem;
+    padding: 1rem;
+    background: green;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.result{
+    margin-top: 20px;
+    font-size: 1.2rem;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 612px)
+{  
+    .title{
+        text-align: center;
+    }
+    .score{
+        position: absolute;
+        top: 200px;
+        width: 100vw;
+    }
+    .options{
+        width: 100vw;
+    }
+}
